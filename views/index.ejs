@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-200 font-sans">
+    <header class="bg-gray-800 text-white p-4 text-center">
+        <h1 class="text-3xl">Manage your To-Do List!</h1>
+    </header>
+    
+    <main class="container mx-auto text-center mt-8 p-4">
+        <div class="flex justify-between items-center mb-4">
+            <% if (user) { %>
+                <p class="text-lg">Hello, <%= user.username %>! 
+                    <a href="/logout" class="text-blue-500 hover:underline ml-4">Logout</a>
+                </p>
+            <% } else { %>
+                <p class="text-lg">Please 
+                    <a href="/login" class="text-blue-500 hover:underline">login</a> or 
+                    <a href="/register" class="text-blue-500 hover:underline">register</a> 
+                    to access your to-do list, or manage a local list as a guest!
+                </p>
+            <% } %>
+        </div>
+        
+        <div class="mx-auto text-center">
+            <p class="text-gray-600 mb-2">Your todo list:</p>
+            <ul id="todoList" class="list-disc pl-4 text-left">
+
+                <li class="mb-2">
+                    <input onClick="handleCheckboxChange(this)" type="checkbox" class="mr-2">
+                    <span class="line-through">Sample Todo 1 (Completed)</span>
+                </li>
+                <li class="mb-2">
+                    <input onClick="handleCheckboxChange(this)" type="checkbox" class="mr-2">
+                    Sample Todo 2
+                </li>
+                <li class="mb-2">
+                    <input onClick="handleCheckboxChange(this)" type="checkbox" class="mr-2">
+                    Sample Todo 3
+                </li>
+            </ul>
+            <div class="mt-4">
+                <button onClick="addTodo()" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">
+                    Add Todo
+                </button>
+                <button onclick="removeCheckedTodos()" class="ml-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300">
+                    Remove Checked
+                </button>
+            </div>
+        </div>
+  
+
+
+            <script>
+              function removeCheckedTodos() {
+                  const todoList = document.getElementById('todoList');
+                  const checkedItems = todoList.querySelectorAll('input[type="checkbox"]:checked');
+
+                  checkedItems.forEach((checkbox) => {
+                      const todoItem = checkbox.parentNode;
+                      todoList.removeChild(todoItem);
+                  });
+              }
+
+              function addTodo() {
+                const description = prompt("Enter a new todo:");
+                if (description) {
+                    // Create a new list item
+                    const newTodo = document.createElement('li');
+                    newTodo.classList.add('flex', 'items-center');
+
+                    // Create a checkbox for the todo
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.classList.add('mr-2');
+                    checkbox.addEventListener('change', () => handleCheckboxChange(checkbox));
+
+                    // Create a span for the todo description
+                    const todoDescription = document.createElement('span');
+                    todoDescription.textContent = description;
+
+                    // Append the checkbox and description to the list item
+                    newTodo.appendChild(checkbox);
+                    newTodo.appendChild(todoDescription);
+
+                    // Append the new todo to the todo list
+                    const todoList = document.getElementById('todoList');
+                    todoList.appendChild(newTodo);
+                }
+            }
+          </script>
+    </main>
+</body>
+</html>
